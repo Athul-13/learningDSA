@@ -55,12 +55,12 @@ class Bst {
 
     //breadth first search
 
-    bfs(root){
+    inorder(root){
         if(!root) return null
 
-        this.bfs(root.left)
+        this.inorder(root.left)
         console.log(root.val)
-        this.bfs(root.right)
+        this.inorder(root.right)
     }
 
     //finding min value on a tree
@@ -94,11 +94,35 @@ class Bst {
 
 }
 
+//is valid bst
+
+function isValid(root){
+    let prev = null;
+
+    function inOrder(node){
+        if(!node) return true;
+        if(!inOrder(node.left)) return false;
+        if(prev!==null && node.val<=prev){
+            return false
+        }
+        prev = node.val;
+        return inOrder(node.right)
+    }
+
+    return inOrder(root)
+}
+
 let bstroot = new Bst()
 bstroot.insert(1)
 bstroot.insert(2)
 bstroot.insert(3)
 bstroot.insert(4)
 bstroot.insert(5)
+bstroot.inorder(bstroot.root)
+console.log('----------------- delete')
 bstroot.delete(bstroot.root,4)
-bstroot.bfs(bstroot.root)
+bstroot.inorder(bstroot.root)
+console.log('----------------- isValid')
+console.log(isValid(bstroot.root))
+
+
