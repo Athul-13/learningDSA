@@ -56,11 +56,16 @@ class Bst {
     //breadth first search
 
     inorder(root){
-        if(!root) return null
+        let res = []
+        function helper(root){
+            if(!root) return null
 
-        this.inorder(root.left)
-        console.log(root.val)
-        this.inorder(root.right)
+            helper(root.left)
+            res.push(root.val)
+            helper(root.right)
+        }
+        helper(root)
+        return res
     }
 
     //finding min value on a tree
@@ -112,17 +117,174 @@ function isValid(root){
     return inOrder(root)
 }
 
+//height of a tree
+
+function height(root){
+    if(!root) return 0
+
+    const left = height(root.left)
+    const right = height(root.right)
+
+    return Math.max(left,right) + 1
+}
+
+//depth of a tree
+
+function depth(root, node, level = 0){
+    if(!root) return -1
+
+    if(root.val === node) return level
+
+    const left = depth(root.left, node, level+1)
+    if(left !== -1) return left
+
+    return depth(root.right, node, level+1)
+}
+
+// is balanced checking
+
+function isBalanced(root){
+    function height(root){
+        if(!root) return 0
+        const left = height(root.left)
+        if(left === -1) return -1;
+
+        const right = height(root.right)
+        if(right === -1) return -1;
+
+        if(Math.abs(left-right) > 1) return -1
+
+        return Math.max(left,right) + 1
+    }
+    return height(root) !== -1
+}
+
+// second and third largest
+
+function snadt(root){
+    if(!root)return null
+    let res = []
+    function helper(node){
+        if(!node) return null
+         helper(node.right)
+        res.push(node.val)
+        helper(node.left)
+    }
+    helper(root)
+
+    return {
+        second: res[1] ?? null,
+        third: res[2] ?? null
+    }
+}
+
+// kth smallest
+
+function kthsmallest(root,k){
+    if(!root) return null
+    let res = []
+    function helper(node){
+        if(!node) return null
+         helper(node.left)
+        res.push(node.val)
+        helper(node.right)
+    }
+    helper(root)
+
+    return res[k-1] ?? null;
+}
+
+// chcek if 2 bst is identical
+
+function isIdentical(root1, root2){
+    if(!root1 && !root2) return true
+
+    if(!root1 || root2) return false
+
+    if(root1.val !== root2.val) return false
+
+    return(
+        isIdentical(root1.left,root2.left) && 
+        isIdentical(root1.right,root2.right)
+    )
+}
+
+//check if s is subtree of main tree t
+
+function isSubtree(T,S){
+    if(!S) return true
+    if(!T) return false
+
+    if(isIdentical(T,S)) return true
+
+    return (
+        isSubtree(T.left,S),
+        isSubtree(T.right,S)
+    )
+}
+
+// bfs 
+
+function bfs(root){
+    if(!root) return null
+
+    let queue = [root]
+    let res = []
+
+    while(queue.length){
+        let node = queue.shift()
+        res.push(node.val)
+        if(node.left) queue.push(node.left)
+        if(node.right) queue.push(node.right)
+    }
+    
+    return res
+}
+
+//print only leaves
+
+function printleaves(root){
+    if(!root) return
+    if(!root.left && !root.right) console.log(root.val)
+    
+    printleaves(root.left)
+    printleaves(root.right)
+    
+}
+
 let bstroot = new Bst()
 bstroot.insert(1)
 bstroot.insert(2)
 bstroot.insert(3)
 bstroot.insert(4)
 bstroot.insert(5)
-bstroot.inorder(bstroot.root)
+bstroot.insert(6)
+
+console.log(bstroot.inorder(bstroot.root))
 console.log('----------------- delete')
 bstroot.delete(bstroot.root,4)
-bstroot.inorder(bstroot.root)
+console.log(bstroot.inorder(bstroot.root))
+
 console.log('----------------- isValid')
 console.log(isValid(bstroot.root))
 
+console.log('----------------- height')
+console.log(height(bstroot.root))
 
+console.log('------------------ depth')
+console.log(depth(bstroot.root,1))
+
+console.log('------------------ isBalanced')
+console.log(isBalanced(bstroot.root))
+
+console.log('------------------ second and third largest')
+console.log(snadt(bstroot.root))
+
+console.log('------------------ kth smallest')
+console.log(kthsmallest(bstroot.root, 3))
+
+console.log('------------------ bfs')
+console.log(bfs(bstroot.root))
+
+console.log('------------------ print leaves')
+printleaves(bstroot.root)
