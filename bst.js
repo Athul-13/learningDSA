@@ -252,13 +252,29 @@ function printleaves(root){
     
 }
 
+//lowest common ancestor
+
+function lowestcommon(root, a, b){
+    if(!root) return null
+
+    if(root.val === a || root.val === b) return root
+
+    const left = lowestcommon(root.left,a,b)
+    const right = lowestcommon(root.right,a,b)
+
+    if (left && right) return root
+
+    return left || right
+}
+
 let bstroot = new Bst()
-bstroot.insert(1)
-bstroot.insert(2)
-bstroot.insert(3)
 bstroot.insert(4)
-bstroot.insert(5)
+bstroot.insert(2)
 bstroot.insert(6)
+bstroot.insert(1)
+bstroot.insert(3)
+bstroot.insert(5)
+bstroot.insert(7)
 
 console.log(bstroot.inorder(bstroot.root))
 console.log('----------------- delete')
@@ -288,3 +304,6 @@ console.log(bfs(bstroot.root))
 
 console.log('------------------ print leaves')
 printleaves(bstroot.root)
+
+console.log('------------------ lowest common ancestor')
+console.log(lowestcommon(bstroot.root, 2, 6))
