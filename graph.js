@@ -46,6 +46,18 @@ class Graph {
             }
         }
     }
+
+    hasPath(v1, v2, visited=new Set()){
+        if(v1 === v2) return true
+        visited.add(v1)
+
+        for(let n of this.adjList[v1]){
+            if(!visited.has(n)){
+                if(this.hasPath(n, v2, visited)) return true
+            }
+        }
+        return false
+    }
 }
 
 
@@ -70,3 +82,6 @@ graph.dfs('A')
 //bfs traverse
 console.log('---------------bfs')
 graph.bfs('A')
+
+//has path between two vertices
+console.log(graph.hasPath('A', 'D'))
