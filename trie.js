@@ -25,6 +25,7 @@ class Trie{
 
     search(word){
         let node = this.root;
+        console.log('word: ',word)
 
         for(let char of word){
             if(!node.children[char]){
@@ -34,6 +35,20 @@ class Trie{
         }
 
         return node.isEnd
+    }
+
+    startsWith(text){
+        let node = this.root
+        console.log('prefix: ',text)
+
+        for(let char of text){
+            if(!node.children[char]){
+                return false
+            }
+            node = node.children[char]
+        }
+
+        return true
     }
 }
 
@@ -46,5 +61,10 @@ trie.insert('apron')
 trie.insert('apple')
 
 //searching a word if exist in trie
+console.log('------------------------------- searching if word exist')
 console.log(trie.search('app'))
 console.log(trie.search('ball'))
+
+//starts with prefix
+console.log('------------------------------- searching prefix')
+console.log(trie.startsWith('ap'))
