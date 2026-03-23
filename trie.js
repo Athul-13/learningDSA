@@ -50,6 +50,30 @@ class Trie{
 
         return true
     }
+
+    autoComplete(prefix){
+        let node = this.root;
+        let res = [];
+
+        for(let char of prefix){
+            if(!node.children[char]) return []
+            node = node.children[char]
+        }
+
+        function dfs(node,prefix){
+            if(node.isEnd){
+                res.push(prefix);
+            }
+
+            for(let char in node.children){
+                dfs(node.children[char],prefix+char)
+            }
+        }
+
+        dfs(node,prefix)
+
+        return res
+    }
 }
 
 // creating a trie
@@ -68,3 +92,7 @@ console.log(trie.search('ball'))
 //starts with prefix
 console.log('------------------------------- searching prefix')
 console.log(trie.startsWith('ap'))
+
+//auto complete with predix
+console.log('------------------------------- autcomplete with prefix')
+console.log(trie.autoComplete('ap'))
